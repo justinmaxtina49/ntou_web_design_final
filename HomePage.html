@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>AniSong Playlist</title>
+        <style>
+            body {
+                background-color: black;
+                color: white;
+                text-align: center;
+                font-size: 2em;
+            }
+            .d {
+                border: 1px solid white;
+            }
+            #top {
+                width: 100%;
+                font-family: "AR DESTINE";                
+                text-align: center;
+                font-size: 3.5em;
+            }
+            #list {
+                width: 100%;
+                
+            }
+            #bot {
+                text-align: center;
+            }
+            .type_but {
+                width: 24.5%;
+                margin: 0em;
+                border: outset;
+                float:left;
+            }
+            .type_but:hover {
+                color: black;
+                background-color: white;
+                font-weight: bold;
+                border: inset gray;
+            }
+            .type_but_select {
+                width: 24.5%;
+                margin: 0em;
+                float:left;
+                color: black;
+                background-color: white;
+                font-weight: bold;
+                border: inset gray;
+            }
+        </style>
+        <script src="jquery-3.3.1.min.js"></script>
+        <script>
+            var relax_name=[];
+            var emotion_name=[];
+            var beats_name=[];
+            var collection_name=[];
+            var nocollection=true;
+            var playlistID="";
+            
+            let jsonUrl = "https://api.myjson.com/bins/13semo";
+            $.getJSON(jsonUrl,function (data){
+                var r=0,e=0,b=0;
+                for(var index in data)
+                {
+                    if(data[index].type=="輕快")
+                    {
+                        relax_name[r]=data[index].name;
+                        r++;
+                    }
+                    else if(data[index].type=="抒情")
+                    {
+                        emotion_name[e]=data[index].name;
+                        e++;
+                    }
+                    else if(data[index].type=="動感")
+                    {
+                        beats_name[b]=data[index].name;
+                        b++;
+                    }
+                }
+                console.log(relax_name);
+            })
+
+            window.addEventListener("load",start);
+            function loadcollection()
+            {
+                playlistID="";
+                for(var i=0,j=0;i<localStorage.length;i++)
+                {
+                    if(localStorage.key(i).startsWith("anisong"))
+                    {
+                        var type=localStorage.key(i).substring(8,10);
+                        var k=localStorage.key(i);
+                        collection_name[j]=type+"-"+localStorage.key(i).substring(11);
+                        j++;nocollection=false;
+                        playlistID += localStorage.getItem(k) + ",";
+                    }
+                }
+                console.log("collection="+collection_name);
+                console.log("playlistID="+playlistID);
+            }
+            
+            function start()
+            {
+                
+                $("#relax").on("click",function(){
+                    $("#YTplaylist").css("display","none");
+                    $("#list").css("display","none").slideDown(500);
+                    list(relax_name,"輕快");
+                    select("relax");
+                })
+                $("#emotion").on("click",function(){
+                    $("#YTplaylist").css("display","none");
+                    $("#list").css("display","none").slideDown(500);
+                    list(emotion_name,"抒情");
+                    select("emotion");
+                })
+                $("#beats").on("click",function(){
+                    $("#YTplaylist").css("display","none");
+                    $("#list").css("display","none").slideDown(500);
+                    list(beats_name,"動感");
+                    select("beats");
+                })
+                $("#collection").on("click",function(){
+                    loadcollection();
+                    $("#YTplaylist").css("display","none");
+                    $("#list").css("display","none").slideDown(500);
+                    collection();
+                })
+                document.getElementById("pause").addEventListener("click",function (){
+                    music=document.getElementById("aud");
+                    music.pause();
+                });
+            }
+            function collection()
+            {
+                console.log("nocollection="+nocollection);
+                if(nocollection)
+                {
+                    alert("你沒有收藏任何樂曲!");
+                    return;
+                }
+                document.getElementById("vid2").src="https://www.youtube.com/embed?rel=0&loop=1&playlist="+playlistID;
+                select("collection");
+                var type=collection_name[0].substring(0,2);
+                console.log("type:"+type);
+                document.getElementById("pic").src="縮圖/"+type+"/"+collection_name[0].substring(3)+".jpg";
+                console.log("pic change:"+collection_name[0]);
+                var x=0;
+                var music=document.getElementById("aud");
+                
+                music.src="音樂/"+type+"/30s/"+collection_name[x].substring(3)+".mp3";
+                music.play();
+                console.log("music play:"+collection_name[x]);
+                music.addEventListener("ended",function (){music.play();console.log("music play:"+collection_name[x].substring(3));});
+                document.onkeydown=function ()
+                {
+                    if(event.keyCode==37||event.keyCode==39)
+                    {
+                        if(event.keyCode==39)
+                        {
+                            x++;
+                            console.log("x++",x);
+                        }
+                        else if(event.keyCode==37)
+                        {
+                            x--;
+                            console.log("x--",x);
+                        }
+                        if(x==-1)
+                        {
+                            x+=collection_name.length;
+                            console.log(x);
+                        }
+                        if(x==collection_name.length)
+                        {
+                            x=0;
+                            console.log(x);
+                        }
+                        type=collection_name[x].substring(0,2);
+                        console.log("type:"+type);
+                        document.getElementById("pic").src="縮圖/"+type+"/"+collection_name[x].substring(3)+".jpg";
+                        console.log("pic change:"+collection_name[x])
+                        
+                        music.src="音樂/"+type+"/30s/"+collection_name[x].substring(3)+".mp3";
+                        music.play();
+                        console.log("music play:"+collection_name[x]);
+                        music.addEventListener("ended",function (){music.play();console.log("music play:"+collection_name[x]);});
+                    }
+                    if(event.keyCode==13)
+                    {
+                        window.location.replace("網頁/"+type+"/"+collection_name[x].substring(3)+"/"+collection_name[x].substring(3)+".html");
+                    }
+                }
+            }
+            function list(array,type_name)
+            {
+                document.getElementById("pic").src="縮圖/"+type_name+"/"+array[0]+".jpg";
+                $("#pic").css("display","none").fadeIn(500);
+                var x=0;
+                var music=document.getElementById("aud");
+                music.src="音樂/"+type_name+"/30s/"+array[x]+".mp3";
+                music.play();
+                console.log("music play:"+array[x]);
+                music.addEventListener("ended",function (){music.play();console.log("music play:"+array[x]);});
+                document.onkeydown=function ()
+                {
+                    if(event.keyCode==37||event.keyCode==39)
+                    {
+                        if(event.keyCode==39)
+                        {
+                            x++;
+                            console.log("x++",x);
+                        }
+                        else if(event.keyCode==37)
+                        {
+                            x--;
+                            console.log("x--",x);
+                        }
+                        if(x==-1)
+                        {
+                            x+=array.length;
+                            console.log(x);
+                        }
+                        if(x==array.length)
+                        {
+                            x=0;
+                            console.log(x);
+                        }
+                        document.getElementById("pic").src="縮圖/"+type_name+"/"+array[x]+".jpg";
+                        $("#pic").css("display","none").fadeIn(500);
+                        console.log("pic change:"+array[x])
+                        
+                        music.src="音樂/"+type_name+"/30s/"+array[x]+".mp3";
+                        music.play();
+                        console.log("music play:"+array[x]);
+                        music.addEventListener("ended",function (){music.play();console.log("music play:"+array[x]);});
+                    }
+                    if(event.keyCode==13)
+                    {
+                        window.location.replace("網頁/"+type_name+"/"+array[x]+"/"+array[x]+".html");
+                    }
+                }
+            }
+            function select(t)
+            {
+                document.getElementById("relax").setAttribute("class","type_but");
+                document.getElementById("emotion").setAttribute("class","type_but");
+                document.getElementById("beats").setAttribute("class","type_but");
+                document.getElementById("collection").setAttribute("class","type_but");
+                document.getElementById(t).setAttribute("class","type_but_select");
+                var rlist="https://www.youtube.com/embed/videoseries?list=PL7mfxu5VVuLN6ciP7Cter0Xu_nlKXyIkG";
+                var elist="https://www.youtube.com/embed/videoseries?list=PL7mfxu5VVuLOmBFwYB9avMPATVUhNgsTf";
+                var blist="https://www.youtube.com/embed/videoseries?list=PL7mfxu5VVuLP5CMkCnAVW8Og8-5x7DmF2";
+                if(t=="relax")document.getElementById("vid2").setAttribute("src",rlist);
+                else if(t=="emotion")document.getElementById("vid2").setAttribute("src",elist);
+                else if(t=="beats")document.getElementById("vid2").setAttribute("src",blist);
+            }
+        </script>
+        
+    </head>
+    <body>
+        <div id="top"><span onclick="window.location.reload()">AniSong Playlist</span></div>
+        <nav id="relax" class="type_but">輕快</nav>
+        <nav id="emotion" class="type_but">抒情</nav>
+        <nav id="beats" class="type_but">動感</nav>
+        <nav id="collection" class="type_but">收藏</nav>
+        <div id="list" class="d" style="display:none">
+            <img src="" id="pic">
+            <audio src="" id="aud"></audio>
+            <p>方向鍵選取歌曲，enter確認</p>
+            <div class="type_but" id="pause">音樂暫停</div>
+            <iframe id="vid2" width="840" height="473" src="" scrolling="no" frameborder="no" framespacing="0" allowfullscreen="true" rel=0 autoplay=1> </iframe>
+
+        </div>
+        <p id="bot"></p>
+    </body>
+</html>
