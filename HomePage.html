@@ -127,10 +127,6 @@
                     $("#list").css("display","none").slideDown(500);
                     collection();
                 })
-                document.getElementById("pause").addEventListener("click",function (){
-                    music=document.getElementById("aud");
-                    music.pause();
-                });
             }
             function collection()
             {
@@ -209,7 +205,6 @@
                 music.src="music/"+type_name+"/30s/"+array[x]+".mp3";
                 music.play();
                 console.log("music play:"+array[x]);
-                music.addEventListener("ended",function (){music.play();console.log("music play:"+array[x]);});
                 document.onkeydown=function ()
                 {
                     if(event.keyCode==37||event.keyCode==39)
@@ -236,12 +231,11 @@
                         }
                         document.getElementById("pic").src="picture/"+type_name+"/"+array[x]+".jpg";
                         $("#pic").css("display","none").fadeIn(500);
-                        console.log("pic change:"+array[x])
+                        console.log("pic change:"+array[x]);
                         
                         music.src="music/"+type_name+"/30s/"+array[x]+".mp3";
                         music.play();
                         console.log("music play:"+array[x]);
-                        music.addEventListener("ended",function (){music.play();console.log("music play:"+array[x]);});
                     }
                     if(event.keyCode==13)
                     {
@@ -273,10 +267,10 @@
         <nav id="beats" class="type_but">動感</nav>
         <nav id="collection" class="type_but">收藏</nav>
         <div id="list" class="d" style="display:none">
-            <img src="" id="pic">
-            <audio src="" id="aud"></audio>
+            <audio src="" id="aud" controls=1 loop=1></audio>
+            <br>
+            <img src="" id="pic" width="500px">
             <p>方向鍵選取歌曲，enter確認</p>
-            <div class="type_but" id="pause">音樂暫停</div>
             <iframe id="vid2" width="840" height="473" src="" scrolling="no" frameborder="no" framespacing="0" allowfullscreen="true" rel=0 autoplay=1> </iframe>
 
         </div>
