@@ -48,6 +48,44 @@
                 font-weight: bold;
                 border: inset gray;
             }
+            #pre {
+                float: left;
+                margin: 0em;
+                border: outset;
+                width: 400px;
+            }
+            #pre:hover {
+                color: black;
+                background-color: white;
+                font-weight: bold;
+                border: inset gray;
+            }
+            #next {
+                float: right;
+                margin: 0em;
+                border: outset;
+                width: 400px;
+            }
+            #next:hover {
+                color: black;
+                background-color: white;
+                font-weight: bold;
+                border: inset gray;
+            }
+            #song_name {
+                margin: 0em;
+                border: outset;
+                width: 500px;
+                text-align: center;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            #song_name:hover {
+                color: black;
+                background-color: white;
+                font-weight: bold;
+                border: inset gray;
+            }
         </style>
         <script src="jquery-3.3.1.min.js"></script>
         <script>
@@ -146,36 +184,59 @@
                 console.log("type:"+type);
                 document.getElementById("pic").src="picture/"+type+"/"+collection_name[0].substring(3)+".jpg";
                 console.log("pic change:"+collection_name[0]);
-                var x=0;
+                var x=0,n=1,p=collection_name.length-1;
                 var music=document.getElementById("aud");
                 
+                document.getElementById("song_name").innerHTML=collection_name[x];
+                document.getElementById("pre").innerHTML="上一首:"+collection_name[p];
+                document.getElementById("next").innerHTML="下一首:"+collection_name[n];
                 music.src="music/"+type+"/30s/"+collection_name[x].substring(3)+".mp3";
                 music.play();
                 console.log("music play:"+collection_name[x]);
                 music.addEventListener("ended",function (){music.play();console.log("music play:"+collection_name[x].substring(3));});
-                document.onkeydown=function ()
+                document.onmousedown=function()
                 {
-                    if(event.keyCode==37||event.keyCode==39)
+                    if(event.target.id=="pre"||event.target.id=="next")
                     {
-                        if(event.keyCode==39)
+                        if(event.target.id=="next")
                         {
-                            x++;
-                            console.log("x++",x);
+                            x++;n++;p++;
+                            console.log("x++;n++;p++;","x="+x,"n="+n,"p="+p);
                         }
-                        else if(event.keyCode==37)
+                        else if(event.target.id=="pre")
                         {
-                            x--;
-                            console.log("x--",x);
+                            x--;n--;p--;
+                            console.log("x--;n--;p--;","x="+x,"n="+n,"p="+p);
                         }
                         if(x==-1)
                         {
                             x+=collection_name.length;
-                            console.log(x);
+                            console.log("x="+x);
                         }
-                        if(x==collection_name.length)
+                        else if(x==collection_name.length)
                         {
                             x=0;
-                            console.log(x);
+                            console.log("x="+x);
+                        }
+                        if(n==-1)
+                        {
+                            n+=collection_name.length;
+                            console.log("n="+n);
+                        }
+                        else if(n==collection_name.length)
+                        {
+                            n=0;
+                            console.log("n="+n);
+                        }
+                        if(p==-1)
+                        {
+                            p+=collection_name.length;
+                            console.log("p="+p);
+                        }
+                        else if(p==collection_name.length)
+                        {
+                            p=0;
+                            console.log("p="+p);
                         }
                         type_first=collection_name[x].substring(0,2);
                         if(type_first=="輕快")type="relax";
@@ -185,12 +246,80 @@
                         document.getElementById("pic").src="picture/"+type+"/"+collection_name[x].substring(3)+".jpg";
                         console.log("pic change:"+collection_name[x])
                         
+                document.getElementById("song_name").innerHTML=collection_name[x];
+                document.getElementById("pre").innerHTML="上一首:"+collection_name[p];
+                document.getElementById("next").innerHTML="下一首:"+collection_name[n];
                         music.src="music/"+type+"/30s/"+collection_name[x].substring(3)+".mp3";
                         music.play();
                         console.log("music play:"+collection_name[x]);
                         music.addEventListener("ended",function (){music.play();console.log("music play:"+collection_name[x]);});
                     }
-                    if(event.keyCode==13)
+                    else if(event.target.id=="song_name")
+                    {
+                        window.location.replace("web/"+type+"/"+collection_name[x].substring(3)+"/"+collection_name[x].substring(3)+".html");
+                    }
+                }
+                document.onkeydown=function ()
+                {
+                    if(event.keyCode==37||event.keyCode==39)
+                    {
+                        if(event.keyCode==39)
+                        {
+                            x++;n++;p++;
+                            console.log("x++;n++;p++;","x="+x,"n="+n,"p="+p);
+                        }
+                        else if(event.keyCode==37)
+                        {
+                            x--;n--;p--;
+                            console.log("x--;n--;p--;","x="+x,"n="+n,"p="+p);
+                        }
+                        if(x==-1)
+                        {
+                            x+=collection_name.length;
+                            console.log("x="+x);
+                        }
+                        else if(x==collection_name.length)
+                        {
+                            x=0;
+                            console.log("x="+x);
+                        }
+                        if(n==-1)
+                        {
+                            n+=collection_name.length;
+                            console.log("n="+n);
+                        }
+                        else if(n==collection_name.length)
+                        {
+                            n=0;
+                            console.log("n="+n);
+                        }
+                        if(p==-1)
+                        {
+                            p+=collection_name.length;
+                            console.log("p="+p);
+                        }
+                        else if(p==collection_name.length)
+                        {
+                            p=0;
+                            console.log("p="+p);
+                        }
+                        type_first=collection_name[x].substring(0,2);
+                        if(type_first=="輕快")type="relax";
+                        else if(type_first=="抒情")type="emotion";
+                        else if(type_first=="動感")type="beats";
+                        console.log("type:"+type);
+                        document.getElementById("pic").src="picture/"+type+"/"+collection_name[x].substring(3)+".jpg";
+                        console.log("pic change:"+collection_name[x])
+                        
+                document.getElementById("song_name").innerHTML=collection_name[x];
+                document.getElementById("pre").innerHTML="上一首:"+collection_name[p];
+                document.getElementById("next").innerHTML="下一首:"+collection_name[n];
+                        music.src="music/"+type+"/30s/"+collection_name[x].substring(3)+".mp3";
+                        music.play();
+                        console.log("music play:"+collection_name[x]);
+                        music.addEventListener("ended",function (){music.play();console.log("music play:"+collection_name[x]);});
+                    }
+                    else if(event.keyCode==13)
                     {
                         window.location.replace("web/"+type+"/"+collection_name[x].substring(3)+"/"+collection_name[x].substring(3)+".html");
                     }
@@ -198,38 +327,124 @@
             }
             function list(array,type_name)
             {                
-                var x=0;
+                var x=0,n=1,p=array.length-1;
                 var music=document.getElementById("aud");
+                document.getElementById("song_name").innerHTML=array[x];
+                document.getElementById("pre").innerHTML="上一首:"+array[p];
+                document.getElementById("next").innerHTML="下一首:"+array[n];
                 music.src="music/"+type_name+"/30s/"+array[x]+".mp3";
                 document.getElementById("pic").src="picture/"+type_name+"/"+array[0]+".jpg";
                 $("#pic").css("display","none").fadeIn(500,function (){
                     music.play();
                     });
                 console.log("music play:"+array[x]);
+                document.onmousedown=function ()
+                {
+                    if(event.target.id=="pre"||event.target.id=="next")
+                    {
+                        if(event.target.id=="next")
+                        {
+                            x++;n++;p++;
+                            console.log("x++;n++;p++;","x="+x,"n="+n,"p="+p);
+                        }
+                        else if(event.target.id=="pre")
+                        {
+                            x--;n--;p--;
+                            console.log("x--;n--;p--;","x="+x,"n="+n,"p="+p);
+                        }
+                        if(x==-1)
+                        {
+                            x+=array.length;
+                            console.log("x="+x);
+                        }
+                        else if(x==array.length)
+                        {
+                            x=0;
+                            console.log("x="+x);
+                        }
+                        if(n==-1)
+                        {
+                            n+=array.length;
+                            console.log("n="+n);
+                        }
+                        else if(n==array.length)
+                        {
+                            n=0;
+                            console.log("n="+n);
+                        }
+                        if(p==-1)
+                        {
+                            p+=array.length;
+                            console.log("p="+p);
+                        }
+                        else if(p==array.length)
+                        {
+                            p=0;
+                            console.log("p="+p);
+                        }
+                        document.getElementById("song_name").innerHTML=array[x];
+                        document.getElementById("pre").innerHTML="上一首:"+array[p];
+                        document.getElementById("next").innerHTML="下一首:"+array[n];
+                        document.getElementById("pic").src="picture/"+type_name+"/"+array[x]+".jpg";
+                        music.src="music/"+type_name+"/30s/"+array[x]+".mp3";
+                        $("#pic").css("display","none").fadeIn(500,function (){
+                            music.play();
+                            });
+                        console.log("pic change:"+array[x]);
+                        console.log("music play:"+array[x]);
+                    }
+                    if(event.target.id=="song_name")
+                    {
+                        window.location.replace("web/"+type_name+"/"+array[x]+"/"+array[x]+".html");
+                    }
+                }
                 document.onkeydown=function ()
                 {
                     if(event.keyCode==37||event.keyCode==39)
                     {
                         if(event.keyCode==39)
                         {
-                            x++;
-                            console.log("x++",x);
+                            x++;n++;p++;
+                            console.log("x++;n++;p++;","x="+x,"n="+n,"p="+p);
                         }
                         else if(event.keyCode==37)
                         {
-                            x--;
-                            console.log("x--",x);
+                            x--;n--;p--;
+                            console.log("x--;n--;p--;","x="+x,"n="+n,"p="+p);
                         }
                         if(x==-1)
                         {
                             x+=array.length;
-                            console.log(x);
+                            console.log("x="+x);
                         }
-                        if(x==array.length)
+                        else if(x==array.length)
                         {
                             x=0;
-                            console.log(x);
+                            console.log("x="+x);
                         }
+                        if(n==-1)
+                        {
+                            n+=array.length;
+                            console.log("n="+n);
+                        }
+                        else if(n==array.length)
+                        {
+                            n=0;
+                            console.log("n="+n);
+                        }
+                        if(p==-1)
+                        {
+                            p+=array.length;
+                            console.log("p="+p);
+                        }
+                        else if(p==array.length)
+                        {
+                            p=0;
+                            console.log("p="+p);
+                        }
+                        document.getElementById("song_name").innerHTML=array[x];
+                        document.getElementById("pre").innerHTML="上一首:"+array[p];
+                        document.getElementById("next").innerHTML="下一首:"+array[n];
                         document.getElementById("pic").src="picture/"+type_name+"/"+array[x]+".jpg";
                         music.src="music/"+type_name+"/30s/"+array[x]+".mp3";
                         $("#pic").css("display","none").fadeIn(500,function (){
@@ -268,9 +483,15 @@
         <nav id="beats" class="type_but">動感</nav>
         <nav id="collection" class="type_but">收藏</nav>
         <div id="list" class="d" style="display:none">
-            <audio src="" id="aud" controls=1 loop=1></audio>
             <br>
+            <br>
+            <p id="song_name"></p>
+            <p><span id="pre"></span>
+            <audio src="" id="aud" controls=1 loop=1></audio>
+            <span id="next"></span></p>
+            <br>            
             <img src="" id="pic" width="500px">
+            
             <p>方向鍵選取歌曲，enter確認</p>
             <iframe id="vid2" width="840" height="473" src="" scrolling="no" frameborder="no" framespacing="0" allowfullscreen="true" rel=0 autoplay=1> </iframe>
 
