@@ -203,7 +203,7 @@
                 var x=0;
                 var music=document.getElementById("aud");
                 music.src="music/"+type_name+"/30s/"+array[x]+".mp3";
-                music.play();
+                document.getElementById("pic").addEventListener("load",function (){music.play();})
                 console.log("music play:"+array[x]);
                 document.onkeydown=function ()
                 {
@@ -234,7 +234,7 @@
                         console.log("pic change:"+array[x]);
                         
                         music.src="music/"+type_name+"/30s/"+array[x]+".mp3";
-                        music.play();
+                        document.getElementById("pic").addEventListener("load",function (){music.play();})
                         console.log("music play:"+array[x]);
                     }
                     if(event.keyCode==13)
