@@ -67,7 +67,7 @@
                     {
                         var k=localStorage.key(i);
                         var n=document.getElementById("name").innerHTML;
-                        if(localStorage.getItem(k)==n)
+                        if(localStorage.key(i).substring(11)==n)
                         {
                             col=1;
                             key=i;
