@@ -79,7 +79,6 @@
                         b++;
                     }
                 }
-                console.log(relax_name);
             })
 
             window.addEventListener("load",start);
@@ -104,26 +103,26 @@
             function start()
             {
                 
+                loadcollection();
                 $("#relax").on("click",function(){
                     $("#YTplaylist").css("display","none");
                     $("#list").css("display","none").slideDown(500);
-                    list(relax_name,"輕快");
+                    list(relax_name,"relax");
                     select("relax");
                 })
                 $("#emotion").on("click",function(){
                     $("#YTplaylist").css("display","none");
                     $("#list").css("display","none").slideDown(500);
-                    list(emotion_name,"抒情");
+                    list(emotion_name,"emotion");
                     select("emotion");
                 })
                 $("#beats").on("click",function(){
                     $("#YTplaylist").css("display","none");
                     $("#list").css("display","none").slideDown(500);
-                    list(beats_name,"動感");
+                    list(beats_name,"beats");
                     select("beats");
                 })
                 $("#collection").on("click",function(){
-                    loadcollection();
                     $("#YTplaylist").css("display","none");
                     $("#list").css("display","none").slideDown(500);
                     collection();
@@ -143,14 +142,18 @@
                 }
                 document.getElementById("vid2").src="https://www.youtube.com/embed?rel=0&loop=1&playlist="+playlistID;
                 select("collection");
-                var type=collection_name[0].substring(0,2);
+                var type_first=collection_name[0].substring(0,2);
+                var type;
+                if(type_first=="輕快")type="relax";
+                else if(type_first=="抒情")type="emotion";
+                else if(type_first=="動感")type="beats";
                 console.log("type:"+type);
-                document.getElementById("pic").src="縮圖/"+type+"/"+collection_name[0].substring(3)+".jpg";
+                document.getElementById("pic").src="picture/"+type+"/"+collection_name[0].substring(3)+".jpg";
                 console.log("pic change:"+collection_name[0]);
                 var x=0;
                 var music=document.getElementById("aud");
                 
-                music.src="音樂/"+type+"/30s/"+collection_name[x].substring(3)+".mp3";
+                music.src="music/"+type+"/30s/"+collection_name[x].substring(3)+".mp3";
                 music.play();
                 console.log("music play:"+collection_name[x]);
                 music.addEventListener("ended",function (){music.play();console.log("music play:"+collection_name[x].substring(3));});
@@ -178,29 +181,32 @@
                             x=0;
                             console.log(x);
                         }
-                        type=collection_name[x].substring(0,2);
+                        type_first=collection_name[x].substring(0,2);
+                        if(type_first=="輕快")type="relax";
+                        else if(type_first=="抒情")type="emotion";
+                        else if(type_first=="動感")type="beats";
                         console.log("type:"+type);
-                        document.getElementById("pic").src="縮圖/"+type+"/"+collection_name[x].substring(3)+".jpg";
+                        document.getElementById("pic").src="picture/"+type+"/"+collection_name[x].substring(3)+".jpg";
                         console.log("pic change:"+collection_name[x])
                         
-                        music.src="音樂/"+type+"/30s/"+collection_name[x].substring(3)+".mp3";
+                        music.src="music/"+type+"/30s/"+collection_name[x].substring(3)+".mp3";
                         music.play();
                         console.log("music play:"+collection_name[x]);
                         music.addEventListener("ended",function (){music.play();console.log("music play:"+collection_name[x]);});
                     }
                     if(event.keyCode==13)
                     {
-                        window.location.replace("網頁/"+type+"/"+collection_name[x].substring(3)+"/"+collection_name[x].substring(3)+".html");
+                        window.location.replace("web/"+type+"/"+collection_name[x].substring(3)+"/"+collection_name[x].substring(3)+".html");
                     }
                 }
             }
             function list(array,type_name)
             {
-                document.getElementById("pic").src="縮圖/"+type_name+"/"+array[0]+".jpg";
+                document.getElementById("pic").src="picture/"+type_name+"/"+array[0]+".jpg";
                 $("#pic").css("display","none").fadeIn(500);
                 var x=0;
                 var music=document.getElementById("aud");
-                music.src="音樂/"+type_name+"/30s/"+array[x]+".mp3";
+                music.src="music/"+type_name+"/30s/"+array[x]+".mp3";
                 music.play();
                 console.log("music play:"+array[x]);
                 music.addEventListener("ended",function (){music.play();console.log("music play:"+array[x]);});
@@ -228,18 +234,18 @@
                             x=0;
                             console.log(x);
                         }
-                        document.getElementById("pic").src="縮圖/"+type_name+"/"+array[x]+".jpg";
+                        document.getElementById("pic").src="picture/"+type_name+"/"+array[x]+".jpg";
                         $("#pic").css("display","none").fadeIn(500);
                         console.log("pic change:"+array[x])
                         
-                        music.src="音樂/"+type_name+"/30s/"+array[x]+".mp3";
+                        music.src="music/"+type_name+"/30s/"+array[x]+".mp3";
                         music.play();
                         console.log("music play:"+array[x]);
                         music.addEventListener("ended",function (){music.play();console.log("music play:"+array[x]);});
                     }
                     if(event.keyCode==13)
                     {
-                        window.location.replace("網頁/"+type_name+"/"+array[x]+"/"+array[x]+".html");
+                        window.location.replace("web/"+type_name+"/"+array[x]+"/"+array[x]+".html");
                     }
                 }
             }
